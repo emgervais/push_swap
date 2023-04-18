@@ -3,7 +3,7 @@
 #include "push_swap.h"
 
 
-void push(t_list** top, int data) {
+void push(t_list** top, void *data) {
     t_list* newNode = malloc(sizeof(t_list));
     newNode->content = data;
     if(!*top)
@@ -13,10 +13,10 @@ void push(t_list** top, int data) {
     *top = newNode;
 }
 
-int pop(t_list** top) {
+void *pop(t_list** top) {
     t_list* temp = *top;
     *top = (*top)->next;
-    int data = temp->content;
+    void *data = temp->content;
     free(temp);
     return data;
 }
@@ -24,7 +24,7 @@ int pop(t_list** top) {
 void swap(t_list** top) {
     if (*top != NULL && (*top)->next != NULL)
     {
-        int temp = (*top)->content;
+        void *temp = (*top)->content;
         (*top)->content = (*top)->next->content;
         (*top)->next->content = temp;
     }
@@ -33,7 +33,7 @@ void swap(t_list** top) {
 void push_other(t_list** dest, t_list** src) {
     if(!*src)
         return ;
-    int data = pop(src);
+    void *data = pop(src);
     push(dest, data);
 }
 
@@ -56,7 +56,7 @@ void reverse_rotate(t_list** top) {
         while (last->next->next != NULL) {
             last = last->next;
         }
-        int data = last->next->content;
+        void *data = last->next->content;
         t_list* temp = last->next;
         last->next = NULL;
         free(temp);
@@ -111,6 +111,36 @@ void rrr(t_list** a, t_list** b) {
     reverse_rotate(b);
 }
 
+void presort(int *list)
+{
+    int i = 1;
+    int temp;
+
+    while(list[i])
+    {
+        if(list[i - 1] > list[i])
+        {
+            temp = list[i - 1];
+            list[i - 1] = list[i];
+            list[i] = temp;
+            i = 0;
+        }
+        i++;
+    }
+}
+
+int *check(char *av, int *list)
+{
+    int k = 0;
+    int num = ft_atoi(av);
+    //int *temp = NULL;
+
+    while(num != list[k] && list[k])
+        k++;
+    k++;
+    int *temp = k;
+    return (temp);
+}
 
 int main(int ac, char **av)
 {
@@ -118,25 +148,28 @@ int main(int ac, char **av)
     t_list **a = malloc(sizeof(t_list**));
     t_list **b = malloc(sizeof(t_list**));
     (*b) = NULL;
-    t_list *temp = ft_lstnew(ft_atoi(av[i++ + 1]));
-    (*a) = temp;
+    int *sorted = malloc(sizeof(int) * ac);
     while(i < ac - 1)
     {
-        temp = ft_lstnew(ft_atoi(av[i + 1]));
-        ft_lstadd_back(a, temp);
+        sorted[i] = ft_atoi(av[i + 1]);
         i++;
     }
-    i = 0;
-    rra(a);
-    /*while(i < ac - 1)
+    sorted[i] = '\0';
+    i = 1;
+    presort(sorted);
+    t_list *temp = ft_lstnew(check(av[i++], sorted));
+    (*a) = temp;
+    while(i < ac)
     {
-        sa(a, b);
-        i++;
-    }*/
+        temp = ft_lstnew(check(av[i++], sorted));
+        ft_lstadd_back(a, temp);
+    }
+    i = 0;
+    //algo call
     temp = (*a);
     while(temp)
     {
-        printf("num : %d\n", temp->content);
+        printf("num : %d\n", (int)temp->content);
         temp = temp->next;
     }
     return 0;
