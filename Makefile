@@ -12,11 +12,12 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
 clean:
+#	@${MAKE} -C ./libft fclean
 	@rm -rf $(OBJS)
 
 fclean: clean
 	@rm -f $(NAME)
 
-re: clean all
+re: fclean all
 
 .PHONY: all, clean, fclean, re, libmlx

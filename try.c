@@ -111,12 +111,12 @@ void rrr(t_list** a, t_list** b) {
     reverse_rotate(b);
 }
 
-void presort(int *list)
+void presort(int *list, int ac)
 {
     int i = 1;
     int temp;
 
-    while(list[i])
+    while(i < ac - 1)
     {
         if(list[i - 1] > list[i])
         {
@@ -129,13 +129,57 @@ void presort(int *list)
     }
 }
 
-int *check(char *av, int *list)
+void tinynbr(t_list **a)
+{
+    t_list *temp = (*a);
+    if(temp->content < temp->next->content && temp->next->content < temp->next->next->content)
+        ft_printf("3 nums sorted\n");
+    if(temp->content < temp->next->content && temp->next->content > temp->next->next->content && temp->content < temp->next->next->content)
+    {
+        rra(a);
+        sa(a);
+        ft_printf("rra\nsa\n");
+    }
+    if(temp->content > temp->next->content && temp->next->content > temp->next->next->content)
+    {
+        sa(a);
+        rra(a);
+        ft_printf("sa\nrra\n");
+    }
+    if(temp->content > temp->next->content && temp->next->content < temp->next->next->content && temp->content > temp->next->next->content)
+    {
+        rra(a);
+        rra(a);
+        ft_printf("rra\nrra\n");
+    }
+    if(temp->content > temp->next->content && temp->next->content < temp->next->next->content && temp->content < temp->next->next->content)
+    {
+        sa(a);
+        ft_printf("sa\n");
+    }
+    if(temp->content < temp->next->content && temp->next->content > temp->next->next->content && temp->content > temp->next->next->content)
+    {
+        rra(a);
+        ft_printf("rra\n");
+    }
+}
+void redirect(t_list **a, t_list **b)
+{
+    int size = ft_lstsize((*a));
+
+    if(size < 3)
+        ft_printf("sorted\n");
+    if(size == 3)
+        tinynbr(a);
+    //if(size < 6)
+    //    smallnbr(t_list **a, t_list **b)
+}
+int *check(char *av, int *list, int ac)
 {
     int k = 0;
     int num = ft_atoi(av);
-    //int *temp = NULL;
 
-    while(num != list[k] && list[k])
+    while(num != list[k] && k < ac - 1)
         k++;
     k++;
     int *temp = k;
@@ -156,16 +200,17 @@ int main(int ac, char **av)
     }
     sorted[i] = '\0';
     i = 1;
-    presort(sorted);
-    t_list *temp = ft_lstnew(check(av[i++], sorted));
+    presort(sorted, ac);
+    t_list *temp = ft_lstnew(check(av[i++], sorted, ac));
     (*a) = temp;
     while(i < ac)
     {
-        temp = ft_lstnew(check(av[i++], sorted));
+        temp = ft_lstnew(check(av[i++], sorted, ac));
         ft_lstadd_back(a, temp);
     }
     i = 0;
     //algo call
+    redirect(a, b);
     temp = (*a);
     while(temp)
     {
