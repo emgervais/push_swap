@@ -109,11 +109,18 @@ int main(int ac, char **av)
     }
     i = 0;
     algo2(a, b);
+    tinynbr(a);
     //redirect(a, b);
     temp = (*b);
     while(temp)
     {
-        printf("num : %d\n", (int)temp->content);
+        printf("num b : %d\n", (int)temp->content);
+        temp = temp->next;
+    }
+    temp = (*a);
+    while(temp)
+    {
+        printf("num a : %d\n", (int)temp->content);
         temp = temp->next;
     }
     return 0;

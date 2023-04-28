@@ -18,6 +18,9 @@ int rra_rrb(t_list **a, t_list **b, int nbr, int index)
     int sizea = ft_lstsize(*a);
     int rra = sizea - index + 1;
     int rrb = sizeb - find_position_in_b(*b, nbr);
+    
+    if(find_position_in_b(*b, nbr) == 0)
+        rrb = 0;
     if(index == 0)
         return (rrb);
     if(rra > rrb)

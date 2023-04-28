@@ -95,6 +95,7 @@ void algo(t_list **a, t_list **b, t_best *best)
     actions = rra_rrb(a, b, temp->content, index);
     best->nbr = temp->content;
     best->act = actions;
+    best->index = 0;
     while(temp)
     {
         if(actions > rra_rrb(a, b, temp->content, index))
@@ -118,70 +119,77 @@ void algo(t_list **a, t_list **b, t_best *best)
         index++;
         temp = temp->next;
     }
-    printf("best num : %d for act : %d\n", best->nbr, best->act);
+    //printf("best num : %d for act : %d to index %d\n", best->nbr, best->act, best->index);
 }
 
-void apply_rra_rrb(t_list **a, t_list **b, int nbr, int index)
+void apply_rra_rrb(t_list **a, t_list **b, int nbr)
 {
-    int size = ft_lstsize(*b);
+    int pos = ft_lstsize(*b) - find_position_in_b(*b, nbr);
+    int i = 0;
 
-    while((*a)->content != nbr && index < size)
+    while((*a)->content != nbr && i < pos)
     {
         rrr(a, b);
-        index++;
+        i++;
     }
     while((*a)->content != nbr)
         rra(a);
-    while(index < size)
+    while(i < pos)
     {
         rrb(b);
-        index++;
+        i++;
     }
     pb(a, b);
 }
 
-void apply_ra_rb(t_list **a, t_list **b, int nbr, int index)
+void apply_ra_rb(t_list **a, t_list **b, int nbr)
 {
+    int pos = find_position_in_b(*b, nbr);
+    int i = 0;
 
-    while((*a)->content != nbr && index > 0)
+    while((*a)->content != nbr && i < pos)
     {
         rr(a, b);
-        index--;
+        i++;
     }
     while((*a)->content != nbr)
     {
-        rra(a);
+        ra(a);
     }
-    while(index > 0)
+    while(i < pos)
     {
-        rrb(b);
-        index--;
+        rb(b);
+        i++;
     }
     pb(a, b);
 }
 
-void apply_ra_rrb(t_list **a, t_list **b, int nbr, int index)
+void apply_ra_rrb(t_list **a, t_list **b, int nbr)
 {
+    int pos = ft_lstsize(*b) - find_position_in_b(*b, nbr) - 1;
+    int i = 0;
 
     while((*a)->content != nbr)
         ra(a);
-    while(index < ft_lstsize(*b))
+    while(i < pos)
     {
         rrb(b);
-        index++;
+        i++;
     }
     pb(a, b);
 }
 
-void apply_rra_rb(t_list **a, t_list **b, int nbr, int index)
+void apply_rra_rb(t_list **a, t_list **b, int nbr)
 {
+    int pos = find_position_in_b(*b, nbr);
+    int i = 0;
 
     while((*a)->content != nbr)
         rra(a);
-    while(index > 0)
+    while(i < pos)
     {
         rb(b);
-        index--;
+        i++;
     }
     pb(a, b);
 }
@@ -196,12 +204,13 @@ void algo2(t_list **a, t_list **b)
     {
         algo(a, b, best);
         if(best->act == rra_rrb(a, b, best->nbr, best->index))
-            apply_rra_rrb(a, b, best->nbr, best->index);
+            apply_rra_rrb(a, b, best->nbr);
         else if(best->act == ra_rb(a, b, best->nbr, best->index))
-            apply_ra_rb(a, b, best->nbr, best->index);
+            apply_ra_rb(a, b, best->nbr);
         else if(best->act == ra_rrb(a, b, best->nbr, best->index))
-            apply_ra_rrb(a, b, best->nbr, best->index);
+            apply_ra_rrb(a, b, best->nbr);
         else if(best->act == rra_rb(a, b, best->nbr, best->index))
-            apply_rra_rb(a, b, best->nbr, best->index);
+            apply_rra_rb(a, b, best->nbr);
+        //printf("act ;%d nbr : %d index ; %d\n\n\n", best->act, best->nbr, best->index);
     }
 }
