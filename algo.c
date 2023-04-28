@@ -195,13 +195,13 @@ void algo2(t_list **a, t_list **b)
     while(ft_lstsize(*a) > 3)
     {
         algo(a, b, best);
-        if(best->act > rra_rrb(a, b, best->nbr, best->index))
+        if(best->act == rra_rrb(a, b, best->nbr, best->index))
             apply_rra_rrb(a, b, best->nbr, best->index);
-        else if(best->act > ra_rb(a, b, best->nbr, best->index))
+        else if(best->act == ra_rb(a, b, best->nbr, best->index))
             apply_ra_rb(a, b, best->nbr, best->index);
-        else if(best->act > ra_rrb(a, b, best->nbr, best->index))
+        else if(best->act == ra_rrb(a, b, best->nbr, best->index))
             apply_ra_rrb(a, b, best->nbr, best->index);
-        else if(best->act > rra_rb(a, b, best->nbr, best->index))
+        else if(best->act == rra_rb(a, b, best->nbr, best->index))
             apply_rra_rb(a, b, best->nbr, best->index);
     }
 }
