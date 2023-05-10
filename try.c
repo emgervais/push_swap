@@ -6,7 +6,7 @@
 /*   By: egervais <egervais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:35:03 by egervais          #+#    #+#             */
-/*   Updated: 2023/04/27 21:42:25 by egervais         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:23:41 by egervais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void presort(int *list, int ac)
     int i = 1;
     int temp;
 
-    while(i < ac - 1)
+    while(i < ac)
     {
         if(list[i - 1] > list[i])
         {
@@ -28,100 +28,198 @@ void presort(int *list, int ac)
         }
         i++;
     }
+    list[i] = 0;
+}
+int init_arg(long *sorted, t_list *nums)
+{
+    int i;
+    t_list *temp;
+
+    i = 0;
+    temp = nums;
+    while(temp)
+    {
+        sorted[i++] = temp->nbr;
+        temp = temp->next;
+    }
+    return (0);
+}
+int fill_arg(long *sorted, char **list, int size, t_list *nums)
+{
+    t_list *temp;
+    t_list *temp2;
+    int i;
+
+    i = 0;
+    if(!nums)
+        return(1);
+    nums->nbr = ft_atoi(list[i++]);
+    nums->pos = i;
+    while(list[i])
+    {
+        temp = malloc(sizeof(t_list));
+        if(!temp)
+            return(ft_clear(nums));
+        temp->nbr = ft_atoi(list[i++]);
+        temp->pos = i;
+        temp2 = nums;
+        while(temp2->next)
+            temp2 = temp2->next;
+        temp->next = NULL;
+        temp->back = temp2;
+        temp2->next = temp;
+    }
+    return(init_arg(sorted, nums));
 }
 
-void tinynbr(t_list **a)
+int valid(char *str)
 {
-    t_list *temp = (*a);
-    if(temp->content < temp->next->content && temp->next->content < temp->next->next->content)
-        ft_printf("3 nums sorted\n");
-    if(temp->content < temp->next->content && temp->next->content > temp->next->next->content && temp->content < temp->next->next->content)
+    int i;
+
+    i = 0;
+    if(str[i] == '-' || str[i] == '+' || (str[i] >= '0' && str[i] <= '9'))
+        i++;
+    while(str[i])
     {
-        rra(a);
-        sa(a);
-        ft_printf("rra\nsa\n");
+        if(str[i] >= '0' && str[i] <= '9')
+        {
+            if(ft_atoi(str) <= INT_MAX && ft_atoi(str) >= INT_MIN)
+                i++;
+            else
+                return(1);
+        }
+        else
+            return (1);
     }
-    if(temp->content > temp->next->content && temp->next->content > temp->next->next->content)
+    return(0);
+}
+int nums_valid(char **list)
+{
+    int i;
+
+    i = 0;
+    while(list[i])
     {
-        sa(a);
-        rra(a);
-        ft_printf("sa\nrra\n");
+        if(valid(list[i]))
+            return(1);
+        i++;
     }
-    if(temp->content > temp->next->content && temp->next->content < temp->next->next->content && temp->content > temp->next->next->content)
+    return(0);
+}
+int duble(t_list *first, t_list *current)
+{
+    long num;
+    t_list *temp;
+
+    num = current->back;
+    temp = current;
+    if(first == current)
+        return(0);
+    while(temp != first)
     {
-        rra(a);
-        rra(a);
-        ft_printf("rra\nrra\n");
+        if(num == temp->nbr)
+            return(1);
+        temp = temp->back;
     }
-    if(temp->content > temp->next->content && temp->next->content < temp->next->next->content && temp->content < temp->next->next->content)
+    return (0);
+}
+int clear_all(t_list *nums, long *sorted)
+{
+    t_list *temp;
+
+    temp = nums->next;
+    free(nums);
+    while(temp)
     {
-        sa(a);
-        ft_printf("sa\n");
+        nums = temp;
+        temp = temp->next;
+        free(nums);
     }
-    if(temp->content < temp->next->content && temp->next->content > temp->next->next->content && temp->content > temp->next->next->content)
+    free(sorted);
+}
+int sort_list(t_list *nums, long *sorted, int ac)
+{
+    t_list *temp;
+    int pos;
+
+    temp = nums;
+    presort(sorted, ac);
+    while(temp)
     {
-        rra(a);
-        ft_printf("rra\n");
+        if(duble(nums, temp))
+            return(clear_all(nums, sorted));
+        else
+            temp->pos = check(temp->nbr, sorted);
+        temp = temp->next;
+    }
+    free(sorted);
+    return(0);
+}
+int init_a(t_bruh **a, t_list *nums)
+{
+       //a = num->pos
+}
+int parsing_arg(t_bruh **a, t_bruh **b, char **av, int ac)
+{
+    long *sorted;
+    t_list *nums;
+    
+    nums = malloc(sizeof(t_list));
+    sorted = malloc(sizeof(long) * ac);
+    if(!sorted)
+    {
+        free(av);
+        ft_freee(a, b);
+    }
+    if(nums_valid(av) || fill_arg(sorted, av, ac, nums))
+    {
+        free(av);
+        free(sorted);
+        ft_freee(a, b);
+    }
+    if(sort_list(nums, sorted, ac) || init_a(a, nums))//init pile a
+    {
+        free(av);
+        free_list(a, b, 1);
     }
 }
-void redirect(t_list **a, t_list **b)
-{
-    int size = ft_lstsize((*a));
 
-    if(size < 3)
-        ft_printf("sorted\n");
-    if(size == 3)
-        tinynbr(a);
-}
-int *check(char *av, int *list, int ac)
+void parsing_str(t_bruh **a, t_bruh **b, char *av)
 {
-    int k = 0;
-    int num = ft_atoi(av);
+    char **list;
+    int  *nbr;
+    int   i;
 
-    while(num != list[k] && k < ac - 1)
-        k++;
-    k++;
-    int *temp = k;
-    return (temp);
+    list = ft_split(av, ' ');
+    if(!list)
+        ft_freee(a, b);
+    i = 0;
+    while(list[i])
+        i++;
+    parsing_arg(a, b, list, i);
 }
 
 int main(int ac, char **av)
 {
     int i = 0;
-    t_list **a = malloc(sizeof(t_list**));
-    t_list **b = malloc(sizeof(t_list**));
+    int size;
+    t_bruh **a = malloc(sizeof(t_bruh**));
+    t_bruh **b = malloc(sizeof(t_bruh**));
+    t_bruh *temp;
+    if(!a || !b)
+        ft_freee(a, b);
     (*b) = NULL;
-    int *sorted = malloc(sizeof(int) * ac);
-    while(i < ac - 1)
-    {
-        sorted[i] = ft_atoi(av[i + 1]);
-        i++;
-    }
-    sorted[i] = '\0';
-    i = 1;
-    presort(sorted, ac);
-    t_list *temp = ft_lstnew(check(av[i++], sorted, ac));
-    (*a) = temp;
-    while(i < ac)
-    {
-        temp = ft_lstnew(check(av[i++], sorted, ac));
-        ft_lstadd_back(a, temp);
-    }
-    i = 0;
-    algo2(a, b);
-    tinynbr(a);
-    //redirect(a, b);
-    temp = (*b);
+    if(ac == 2)
+        parsing_str(a, b, av[1]);
+    else
+        parsing_arg(a, b, av, ac - 1);
+    temp = *a;
     while(temp)
     {
-        printf("num b : %d\n", (int)temp->content);
+        printf("list %d\n", temp->content);
         temp = temp->next;
-    }
-    temp = (*a);
-    while(temp)
-    {
-        printf("num a : %d\n", (int)temp->content);
-        temp = temp->next;
-    }
-    return 0;
+    }//segfault with doubles or infinite loop for 2 args : size's diffrent
+    redirect(ft_lstsize((*a)), a, b);//segfault with weird number
+    free_list(a, b, 0);//weird with negative;
+    return (0);//check int max
 }

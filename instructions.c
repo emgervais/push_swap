@@ -6,123 +6,64 @@
 /*   By: egervais <egervais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:57:08 by egervais          #+#    #+#             */
-/*   Updated: 2023/04/27 21:47:41 by egervais         ###   ########.fr       */
+/*   Updated: 2023/05/03 18:33:29 by egervais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void push(t_list** top, void *data) {
-    t_list* newNode = malloc(sizeof(t_list));
-    newNode->content = data;
-    if(!*top)
-        newNode->next = NULL;
-    else
-        newNode->next = *top;
-    *top = newNode;
-}
-
-void *pop(t_list** top) {
-    t_list* temp = *top;
-    *top = (*top)->next;
-    void *data = temp->content;
-    free(temp);
-    return (data);
-}
-
-void swap(t_list** top) {
-    if (*top != NULL && (*top)->next != NULL)
-    {
-        void *temp = (*top)->content;
-        (*top)->content = (*top)->next->content;
-        (*top)->next->content = temp;
-    }
-}
-
-void push_other(t_list** dest, t_list** src) {
-    if(!*src)
-        return ;
-    void *data = pop(src);
-    push(dest, data);
-}
-
-void rotate(t_list** top) {
-    if (*top != NULL && (*top)->next != NULL) 
-    {
-        t_list* last = *top;
-        while(last->next)
-            last = last->next;
-        last->next = *top;
-        last = (*top)->next;
-        (*top)->next = NULL;
-        (*top) = last;
-    }
-}
-
-void reverse_rotate(t_list** top) {
-    if (*top != NULL && (*top)->next != NULL) {
-        t_list* last = *top;
-        while (last->next->next != NULL) {
-            last = last->next;
-        }
-        void *data = last->next->content;
-        t_list* temp = last->next;
-        last->next = NULL;
-        free(temp);
-        push(top, data);
-    }
-}
-
-void sa(t_list** a) {
+void sa(t_bruh** a)
+{
     swap(a);
+    write(1, "sa\n", 3);
 }
 
-void sb(t_list** b) {
-    swap(b);
-}
-
-void ss(t_list** a, t_list** b) {
-    swap(a);
-    swap(b);
-}
-
-void pa(t_list** a, t_list** b) {
+void pa(t_bruh** a, t_bruh** b)
+{
     push_other(a, b);
+    write(1, "pa\n", 3);
 }
 
-void pb(t_list** a, t_list** b) {
+void pb(t_bruh** a, t_bruh** b)
+{
     push_other(b, a);
-    printf("pb\n");
+    write(1, "pb\n", 3);
 }
 
-void ra(t_list** a) {
+void ra(t_bruh** a)
+{
     rotate(a);
-    printf("ra\n");
+    write(1, "ra\n", 3);
 }
 
-void rb(t_list** b) {
+void rb(t_bruh** b)
+{
     rotate(b);
-    printf("rb\n");
+    write(1, "rb\n", 3);
 }
 
-void rr(t_list** a, t_list** b) {
+void rr(t_bruh** a, t_bruh** b)
+{
     rotate(a);
     rotate(b);
-    printf("rr\n");
+    write(1, "rr\n", 3);
 }
 
-void rra(t_list** a) {
+void rra(t_bruh** a)
+{
     reverse_rotate(a);
-    printf("rra\n");
+    write(1, "rra\n", 4);
 }
 
-void rrb(t_list** b) {
+void rrb(t_bruh** b)
+{
     reverse_rotate(b);
-    printf("rrb\n");
+    write(1, "rrb\n", 4);
 }
 
-void rrr(t_list** a, t_list** b) {
+void rrr(t_bruh** a, t_bruh** b)
+{
     reverse_rotate(a);
     reverse_rotate(b);
-    printf("rrr\n");
+    write(1, "rrr\n", 4);
 }
