@@ -6,7 +6,7 @@
 /*   By: egervais <egervais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 17:45:04 by egervais          #+#    #+#             */
-/*   Updated: 2023/05/03 17:47:15 by egervais         ###   ########.fr       */
+/*   Updated: 2023/05/13 17:55:27 by egervais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_bruh	*ft_lstnew(int content)
 	t_bruh	*a;
 
 	a = malloc(sizeof(*a));
-	if (a == NULL)
+	if (!a)
 		return (NULL);
 	a->content = content;
 	a->next = NULL;
