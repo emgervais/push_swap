@@ -51,3 +51,19 @@ void	apply_rra_rb_a(t_bruh **a, t_bruh **b, int nbr)
 		rra(a);
 	pa(a, b);
 }
+
+int ft_sorted(t_bruh **a)
+{
+	t_bruh *temp;
+	t_bruh *temp2;
+
+	temp = (*a);
+	while (temp->next)
+	{
+		temp2 = temp->next;
+		if (temp->content > temp2->content)
+			return (1);
+		temp = temp->next;
+	}
+	return (0);
+}

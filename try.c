@@ -75,6 +75,8 @@ int	main(int ac, char **av)
 
 	if (ac < 2)
 		return (1);
+	if(!av[1][0])
+		return (0);
 	a = malloc(sizeof(t_bruh **));
 	(*a) = malloc(sizeof(t_bruh));
 	b = malloc(sizeof(t_bruh **));

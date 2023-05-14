@@ -116,4 +116,5 @@ void				redirect(int size, t_bruh **a, t_bruh **b);
 void				adjust_best(t_best *best, long content, int actions,
 						int index);
 void				apply_tiny_nbr(int s, int orientation, t_bruh **a);
+int					ft_sorted(t_bruh **a);
 #endif

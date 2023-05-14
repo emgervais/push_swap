@@ -31,9 +31,11 @@ void	two_nbr(t_bruh **a)
 		sa(a);
 }
 
+
 void	redirect(int size, t_bruh **a, t_bruh **b)
 {
-	if (size == 1)
+
+	if (!ft_sorted(a))
 		return ;
 	else if (size == 2)
 		two_nbr(a);
